@@ -22,7 +22,6 @@ async function handleSubmit(data: string): Promise<void> {
       setMovies([])
       setIsLoading(true);
       setIsError(false);
-      
       const newMovies = await fetchMovies(data);
       setMovies(newMovies);
       if (newMovies.length === 0) {
@@ -30,10 +29,10 @@ async function handleSubmit(data: string): Promise<void> {
       }
       
     } catch {
-      toast.error("Failed to fetch movies. Please try again.");
-      setIsError(true);
+        toast.error("Failed to fetch movies. Please try again.");
+        setIsError(true);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
   };
   
@@ -51,9 +50,8 @@ function handleCloseModal(): void {
       <div className={css.app}>
         <SearchBar onSubmit={handleSubmit}/>
         <Toaster 
-         
-          position="top-center"
-          reverseOrder={false}
+          /*position="top-center"
+          reverseOrder={false}*/
         />
         {isLoading && <Loader/>}
         {isError && <ErrorMessage/>}
