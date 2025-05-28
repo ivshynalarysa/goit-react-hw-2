@@ -13,7 +13,7 @@ export default function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const [selectedCard, setSelectedCard] = useState<Movie | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
 
 async function handleSubmit(data: string): Promise<void> {
@@ -37,11 +37,11 @@ async function handleSubmit(data: string): Promise<void> {
   };
   
 function selectCard(movie: Movie): void {
-     setSelectedCard(movie);
+     setSelectedMovie(movie);
 }
 
 function handleCloseModal(): void {
-  setSelectedCard(null);
+  setSelectedMovie(null);
 }
   
 
@@ -50,13 +50,19 @@ function handleCloseModal(): void {
       <div className={css.app}>
         <SearchBar onSubmit={handleSubmit}/>
         <Toaster 
-          /*position="top-center"
-          reverseOrder={false}*/
+            toastOptions={{
+            error: {
+            style: {
+            color: 'white',
+            background: 'red',
+      },
+    },
+  }}
         />
         {isLoading && <Loader/>}
         {isError && <ErrorMessage/>}
         <MovieGrid onSelect={selectCard} movies={movies} />
-        {selectedCard && <MovieModal movie={selectedCard} onClose={handleCloseModal} />}
+        {selectedMovie && <MovieModal movie={selectedMovie} onClose={handleCloseModal} />}
       
       </div>
 

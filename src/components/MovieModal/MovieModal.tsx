@@ -11,14 +11,13 @@ interface MovieModalProps {
 }
 
 export default function MovieModal({ movie, onClose }: MovieModalProps) {
-
-
+ //закриття при кліку на фон
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
-
+//Побічні ефекти: скрол і Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -35,6 +34,17 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
     };
   }, [onClose]);
 
+   // Визначення шляху до зображення
+  let imageSrc: string | null = null;
+
+  if (movie.backdrop_path) {
+   imageSrc = `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`;
+  } else if (movie.poster_path) {
+    imageSrc = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+  } else {
+    imageSrc = 'https://placehold.co/500x750?text=No+Image';
+  }
+
     return createPortal (
          
        <div 
@@ -44,25 +54,33 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
        onClick={handleBackdropClick}>
 
   <div className={css.modal}>
-    <button className={css.closeButton} 
+    <button 
+     className={css.closeButton} 
      onClick={() => onClose()}  
      aria-label="Close modal">
       &times;
     </button>
     
+//заміна src 
+
+  {imageSrc ? (
     <img
-      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+      src={imageSrc}
       alt={movie.title || "Movie poster"}
       className={css.image}
     />
+  ) : (<div className={css.noImage}>Image unavailable</div>)
+  }
+    
+
     <div className={css.content}>
       <h2>{movie.title}</h2>
-      <p>{movie.overview}</p>
+      <p>{movie.overview || 'Description missing.'}</p>
       <p>
-        <strong>Release Date:</strong> {movie.release_date} 
+        <strong>Release Date:</strong>{movie.release_date || 'Unknown'} 
       </p>
       <p>
-        <strong>Rating:</strong> {movie.vote_average}/10
+        <strong>Rating:</strong>{movie.vote_average/10}
       </p>
     </div>
   </div>
